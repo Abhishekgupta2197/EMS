@@ -1,0 +1,18 @@
+﻿<h3>index</h3>
+<table border="1">
+    <tr>
+        <th>Id</th>
+         <th>FirstName</th>
+          <th>LastName</th>
+         
+    </tr>
+    @foreach (var user in ViewBag.users)
+    {
+    <tr>
+        <td>@user.FirstName</td>
+         <td>@user.LastName</td>
+        
+    </tr>
+    }
+</table>
+

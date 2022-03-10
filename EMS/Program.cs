@@ -1,7 +1,26 @@
+using EMS.Models;
+using EMS.Services;
+using Microsoft.EntityFrameworkCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+IConfiguration configuration = new ConfigurationBuilder()
+                                .AddJsonFile("appsettings.json")
+                                .Build();
+
+builder.Services.AddDbContext<CompanyDbContext>(options =>
+{
+    options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("CompanyDB"));
+});
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<UserService, UserServiceImpl>();
 
 var app = builder.Build();
 
@@ -22,6 +41,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=User}/{action=Index}/{id?}");
 
 app.Run();
