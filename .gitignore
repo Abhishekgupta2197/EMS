@@ -304,6 +304,10 @@ paket-files/
 # FAKE - F# Make
 .fake/
 
+#SQL 
+
+*.ldf
+
 # CodeRush personal settings
 .cr/personal
 
