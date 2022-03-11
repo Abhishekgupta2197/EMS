@@ -22,10 +22,13 @@ namespace EMS.Models
         public string? Profile { get; set; }
         public string EmailId { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public string DepartmentId { get; set; } = null!;
+        public int DepartmentId { get; set; }
         public int PositionId { get; set; }
         public int AddressId { get; set; }
 
+        public virtual Address Address { get; set; } = null!;
+        public virtual Department Department { get; set; } = null!;
+        public virtual Position Position { get; set; } = null!;
         public virtual ICollection<HoursWorked> HoursWorkeds { get; set; }
         public virtual ICollection<Leave> Leaves { get; set; }
         public virtual ICollection<PayType> PayTypes { get; set; }

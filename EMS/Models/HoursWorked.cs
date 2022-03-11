@@ -11,11 +11,11 @@ namespace EMS.Models
         }
 
         public int PunchId { get; set; }
-        public DateTime? PunchInTime { get; set; }
-        public DateTime? PunchOutTime { get; set; }
-        public int? EmployeeId { get; set; }
+        public DateTime PunchInTime { get; set; }
+        public DateTime PunchOutTime { get; set; }
+        public int EmployeeId { get; set; }
 
-        public virtual Employee? Employee { get; set; }
+        public virtual Employee Employee { get; set; } = null!;
         public virtual ICollection<Pay> Pays { get; set; }
     }
 }

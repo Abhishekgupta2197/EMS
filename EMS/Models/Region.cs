@@ -7,6 +7,7 @@ namespace EMS.Models
     {
         public Region()
         {
+            Addresses = new HashSet<Address>();
             Cities = new HashSet<City>();
         }
 
@@ -15,6 +16,7 @@ namespace EMS.Models
         public short CountryId { get; set; }
 
         public virtual Country Country { get; set; } = null!;
+        public virtual ICollection<Address> Addresses { get; set; }
         public virtual ICollection<City> Cities { get; set; }
     }
 }
