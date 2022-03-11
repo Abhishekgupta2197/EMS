@@ -306,7 +306,7 @@ paket-files/
 
 #SQL 
 
-*.ldf
+EMS_DB_log.ldf
 
 # CodeRush personal settings
 .cr/personal
