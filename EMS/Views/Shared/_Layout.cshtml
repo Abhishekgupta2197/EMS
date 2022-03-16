@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using EMS.Controllers
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -70,41 +72,32 @@
                         <!-- Add icons to the links using the .nav-icon class
                              with font-awesome or any other icon font library -->
                       
-                         <li class="nav-item">
+                          <li class="nav-item">
                             <a href="pages/home.html" class="nav-link">
-                                <i class="nav-icon fas fa-home"></i>
-                                <p>
-                                    Home
+                                <i class="nav-icon fas fa-home "></i>
+                                <p> 
+                                   Home  
                                 </p>
                             </a>
                         </li>
 
-                         <li class="nav-item">
-                            <a href="pages/home.html" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Employees
-                                </p>
-                            </a>
+                       <li class="nav-item">
+                            <a class="nav-link @Html.IsSelected(actions: "Index", controllers: "User")" href="@Url.Action("Index", "User")"><i class="nav-icon fas fa-users"></i><span> Employees</span> </a>
                         </li>
 
                          <li class="nav-item">
-                            <a href="pages/home.html" class="nav-link">
+                            <a href="pages/home.html" class="nav-link"> 
                                 <i class="nav-icon fas fa-building"></i>
                                 <p>
                                     Department
                                 </p>
-                            </a>
+                            </a> 
                         </li>
 
-                         <li class="nav-item">
-                            <a href="pages/home.html" class="nav-link">
-                                <i class="nav-icon fas fa-sitemap"></i>
-                                <p>
-                                    Position
-                                </p>
-                            </a>
+                          <li class="nav-item">
+                            <a class="nav-link @Html.IsSelected(actions: "Index", controllers: "Position")" href="@Url.Action("Index", "Position")"><i class="nav-icon fas fa-sitemap"></i><span> Positions</span> </a>
                         </li>
+
 
                          <li class="nav-item">
                             <a href="pages/home.html" class="nav-link">
@@ -123,8 +116,8 @@
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item menu-open">
-                            <a href="#" class="nav-link active">
+                        <li class="nav-item menu-close">
+                            <a href="#" class="nav-link ">
                                 <i class="nav-icon fas fa-address-book"></i>
                                 <p>
                                     Address
@@ -202,5 +195,6 @@
     <!-- AdminLTE for demo purposes -->
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="~/Frontend/dist/js/pages/dashboard3.js"></script>
+    
 </body>
 </html>
