@@ -16,7 +16,6 @@ namespace EMS.Models
         {
         }
 
-        public virtual DbSet<Address> Addresses { get; set; } = null!;
         public virtual DbSet<Admin> Admins { get; set; } = null!;
         public virtual DbSet<City> Cities { get; set; } = null!;
         public virtual DbSet<Country> Countries { get; set; } = null!;
@@ -27,53 +26,13 @@ namespace EMS.Models
         public virtual DbSet<Pay> Pays { get; set; } = null!;
         public virtual DbSet<PayType> PayTypes { get; set; } = null!;
         public virtual DbSet<Position> Positions { get; set; } = null!;
-        public virtual DbSet<Region> Regions { get; set; } = null!;
+        public virtual DbSet<State> States { get; set; } = null!;
         public virtual DbSet<Task> Tasks { get; set; } = null!;
 
- 
+      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Address>(entity =>
-            {
-                entity.ToTable("Address");
-
-                entity.Property(e => e.AddressId).HasColumnName("Address_Id");
-
-                entity.Property(e => e.Address1)
-                    .IsUnicode(false)
-                    .HasColumnName("Address");
-
-                entity.Property(e => e.CityId).HasColumnName("City_Id");
-
-                entity.Property(e => e.CountryId).HasColumnName("Country_Id");
-
-                entity.Property(e => e.PostalCode)
-                    .HasMaxLength(6)
-                    .IsUnicode(false)
-                    .HasColumnName("Postal_Code");
-
-                entity.Property(e => e.StateId).HasColumnName("State_Id");
-
-                entity.HasOne(d => d.City)
-                    .WithMany(p => p.Addresses)
-                    .HasForeignKey(d => d.CityId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Address__City_Id__10566F31");
-
-                entity.HasOne(d => d.Country)
-                    .WithMany(p => p.Addresses)
-                    .HasForeignKey(d => d.CountryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Address__Country__123EB7A3");
-
-                entity.HasOne(d => d.State)
-                    .WithMany(p => p.Addresses)
-                    .HasForeignKey(d => d.StateId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Address__State_I__114A936A");
-            });
-
             modelBuilder.Entity<Admin>(entity =>
             {
                 entity.HasKey(e => e.UserId)
@@ -92,33 +51,39 @@ namespace EMS.Models
 
             modelBuilder.Entity<City>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("City");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.CityId).ValueGeneratedNever();
+
+                entity.Property(e => e.CityName)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Region)
+                entity.Property(e => e.CityStateId).HasColumnName("City_StateId");
+
+                entity.HasOne(d => d.CityState)
                     .WithMany(p => p.Cities)
-                    .HasForeignKey(d => d.RegionId)
+                    .HasForeignKey(d => d.CityStateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Cities_Regions");
+                    .HasConstraintName("FK_City_State");
             });
 
             modelBuilder.Entity<Country>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("Country");
 
-                entity.Property(e => e.Code)
+                entity.Property(e => e.CountryId).ValueGeneratedNever();
+
+                entity.Property(e => e.CountryCode)
                     .HasMaxLength(2)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CountryName)
+                    .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Language)
                     .HasMaxLength(3)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(255)
                     .IsUnicode(false);
             });
 
@@ -137,9 +102,13 @@ namespace EMS.Models
             {
                 entity.ToTable("Employee");
 
-                entity.Property(e => e.EmployeeId).HasColumnName("Employee_Id");
+                entity.Property(e => e.EmployeeId)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("Employee_Id");
 
-                entity.Property(e => e.AddressId).HasColumnName("Address_Id");
+                entity.Property(e => e.Address)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.BirthDate)
                     .HasColumnType("date")
@@ -174,23 +143,35 @@ namespace EMS.Models
 
                 entity.Property(e => e.Profile).IsUnicode(false);
 
-                entity.HasOne(d => d.Address)
+                entity.HasOne(d => d.City)
                     .WithMany(p => p.Employees)
-                    .HasForeignKey(d => d.AddressId)
+                    .HasForeignKey(d => d.CityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Employee__Addres__0F624AF8");
+                    .HasConstraintName("FK_Employee_City");
 
                 entity.HasOne(d => d.Department)
                     .WithMany(p => p.Employees)
                     .HasForeignKey(d => d.DepartmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Employee__Depart__0D7A0286");
+                    .HasConstraintName("FK__Employee__Depart__6EC0713C");
+
+                entity.HasOne(d => d.EmployeeNavigation)
+                    .WithOne(p => p.Employee)
+                    .HasForeignKey<Employee>(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Employee_Country");
 
                 entity.HasOne(d => d.Position)
                     .WithMany(p => p.Employees)
                     .HasForeignKey(d => d.PositionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Employee__Positi__0E6E26BF");
+                    .HasConstraintName("FK__Employee__Positi__6FB49575");
+
+                entity.HasOne(d => d.State)
+                    .WithMany(p => p.Employees)
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Employee_State");
             });
 
             modelBuilder.Entity<HoursWorked>(entity =>
@@ -216,7 +197,7 @@ namespace EMS.Models
                     .WithMany(p => p.HoursWorkeds)
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Hours_Wor__Emplo__0A9D95DB");
+                    .HasConstraintName("FK__Hours_Wor__Emplo__70A8B9AE");
             });
 
             modelBuilder.Entity<Leave>(entity =>
@@ -237,7 +218,7 @@ namespace EMS.Models
                     .WithMany(p => p.Leaves)
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Leave__Employee___06CD04F7");
+                    .HasConstraintName("FK__Leave__Employee___6CD828CA");
             });
 
             modelBuilder.Entity<Pay>(entity =>
@@ -262,7 +243,7 @@ namespace EMS.Models
                     .WithMany(p => p.Pays)
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Pay__Employee_Id__47DBAE45");
+                    .HasConstraintName("FK__Pay__Employee_Id__719CDDE7");
 
                 entity.HasOne(d => d.Punch)
                     .WithMany(p => p.Pays)
@@ -289,7 +270,7 @@ namespace EMS.Models
                 entity.HasOne(d => d.Employee)
                     .WithMany(p => p.PayTypes)
                     .HasForeignKey(d => d.EmployeeId)
-                    .HasConstraintName("FK__Pay_Type__Employ__4BAC3F29");
+                    .HasConstraintName("FK__Pay_Type__Employ__72910220");
 
                 entity.HasOne(d => d.Pay)
                     .WithMany(p => p.PayTypes)
@@ -308,19 +289,23 @@ namespace EMS.Models
                     .HasColumnName("Position_Name");
             });
 
-            modelBuilder.Entity<Region>(entity =>
+            modelBuilder.Entity<State>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.ToTable("State");
 
-                entity.Property(e => e.Name)
+                entity.Property(e => e.StateId).ValueGeneratedNever();
+
+                entity.Property(e => e.StateCountryId).HasColumnName("State_CountryId");
+
+                entity.Property(e => e.StateName)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.Country)
-                    .WithMany(p => p.Regions)
-                    .HasForeignKey(d => d.CountryId)
+                entity.HasOne(d => d.StateCountry)
+                    .WithMany(p => p.States)
+                    .HasForeignKey(d => d.StateCountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Regions_Countries");
+                    .HasConstraintName("FK_State_Country");
             });
 
             modelBuilder.Entity<Task>(entity =>
@@ -339,7 +324,7 @@ namespace EMS.Models
                     .WithMany(p => p.Tasks)
                     .HasForeignKey(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Task__Employee_I__09A971A2");
+                    .HasConstraintName("FK__Task__Employee_I__6DCC4D03");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -7,16 +7,15 @@ namespace EMS.Models
     {
         public Country()
         {
-            Addresses = new HashSet<Address>();
-            Regions = new HashSet<Region>();
+            States = new HashSet<State>();
         }
 
-        public short Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string Code { get; set; } = null!;
+        public int CountryId { get; set; }
+        public string CountryName { get; set; } = null!;
+        public string CountryCode { get; set; } = null!;
         public string Language { get; set; } = null!;
 
-        public virtual ICollection<Address> Addresses { get; set; }
-        public virtual ICollection<Region> Regions { get; set; }
+        public virtual Employee Employee { get; set; } = null!;
+        public virtual ICollection<State> States { get; set; }
     }
 }
