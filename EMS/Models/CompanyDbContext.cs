@@ -17,6 +17,7 @@ namespace EMS.Models
         }
 
         public virtual DbSet<Admin> Admins { get; set; } = null!;
+        public virtual DbSet<AssignTask> AssignTasks { get; set; } = null!;
         public virtual DbSet<City> Cities { get; set; } = null!;
         public virtual DbSet<Country> Countries { get; set; } = null!;
         public virtual DbSet<Department> Departments { get; set; } = null!;
@@ -27,9 +28,7 @@ namespace EMS.Models
         public virtual DbSet<PayType> PayTypes { get; set; } = null!;
         public virtual DbSet<Position> Positions { get; set; } = null!;
         public virtual DbSet<State> States { get; set; } = null!;
-        public virtual DbSet<Task> Tasks { get; set; } = null!;
 
-      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,6 +46,25 @@ namespace EMS.Models
                 entity.Property(e => e.Password)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<AssignTask>(entity =>
+            {
+                entity.ToTable("AssignTask");
+
+                entity.Property(e => e.AssignTaskId).HasColumnName("AssignTask_Id");
+
+                entity.Property(e => e.AssignTaskName)
+                    .IsUnicode(false)
+                    .HasColumnName("AssignTask_Name");
+
+                entity.Property(e => e.EmployeeId).HasColumnName("Employee_Id");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.AssignTasks)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__AssignTask__Employee_I__6DCC4D03");
             });
 
             modelBuilder.Entity<City>(entity =>
@@ -155,7 +173,7 @@ namespace EMS.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Employee__Depart__6EC0713C");
 
-                entity.HasOne(d => d.EmployeeNavigation)
+                entity.HasOne(d => d.Country)
                     .WithOne(p => p.Employee)
                     .HasForeignKey<Employee>(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -306,25 +324,6 @@ namespace EMS.Models
                     .HasForeignKey(d => d.StateCountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_State_Country");
-            });
-
-            modelBuilder.Entity<Task>(entity =>
-            {
-                entity.ToTable("Task");
-
-                entity.Property(e => e.TaskId).HasColumnName("Task_Id");
-
-                entity.Property(e => e.EmployeeId).HasColumnName("Employee_Id");
-
-                entity.Property(e => e.TaskName)
-                    .IsUnicode(false)
-                    .HasColumnName("Task_Name");
-
-                entity.HasOne(d => d.Employee)
-                    .WithMany(p => p.Tasks)
-                    .HasForeignKey(d => d.EmployeeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Task__Employee_I__6DCC4D03");
             });
 
             OnModelCreatingPartial(modelBuilder);

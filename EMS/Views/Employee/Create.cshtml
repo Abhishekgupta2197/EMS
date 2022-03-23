@@ -63,7 +63,7 @@
             @*Country*@
              <div class="form-group">
                   <label class="control-label">Country</label>
-               <select  asp-for="CountryId" id="CountryList" class ="form-control" asp-items="@ViewBag.Countriess">
+               <select  asp-for="CountryId" id="CountryList" class ="form-control" asp-items="@ViewBag.Countries">
                 <option class="control-label"> Please Select Country</option>
                 </select>
             </div>
@@ -124,18 +124,18 @@ $(document).ready(function () {
     })
    //state to city 
     $("#StateList").change(function () {
-        $("#CityList").empty();
+         $("#CityList").empty();
         $.ajax({
             type: 'GET',
             url: '@Url.Action("LoadCity")',
             dataType: 'json',
             data: { id: $("#StateList").val() },
 
-            success: function (cities) {
+            success:async function (cities) {
                 $("#CityList").append('<option value="' + -1 + '">' +
                     "Select City" + '</option>');
 
-                $.each(cities, function (i, city) {
+                $.each(cities, await function (i, city) {
                     $("#CityList").append('<option value="' + city.value + '">' +
                         city.text + '</option>');
                 });

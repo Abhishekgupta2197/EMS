@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace EMS.Models
 {
-    public partial class Task
+    public partial class AssignTask
     {
-        public int TaskId { get; set; }
-        public string TaskName { get; set; } = null!;
+        public int AssignTaskId { get; set; }
+        public string AssignTaskName { get; set; } = null!;
         public int EmployeeId { get; set; }
 
         public virtual Employee Employee { get; set; } = null!;

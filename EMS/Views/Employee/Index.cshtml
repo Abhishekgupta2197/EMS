@@ -5,49 +5,37 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+  <div class="p-3">
+           <a asp-action="Create" class="btn btn-primary">Create New</a>
+     </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
+           
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                FirstName
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+               LastName
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BirthDate)
+               Email ID
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gender)
+                Country
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Profile)
+                State
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmailId)
+               City
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
+                Department
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CountryId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StateId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CityId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Department)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Position)
+               Position
             </th>
             <th></th>
         </tr>
@@ -55,6 +43,7 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+              
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
@@ -62,39 +51,26 @@
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BirthDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Profile)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.EmailId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Password)
+                @Html.DisplayFor(modelItem => item.Country.CountryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CountryId)
+                @Html.DisplayFor(modelItem => item.State.StateName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StateId)
+                @Html.DisplayFor(modelItem => item.City.CityName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CityId)
+                @Html.DisplayFor(modelItem => item.Department.DepartmentName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Department.DepartmentId)
+                @Html.DisplayFor(modelItem => item.Position.PositionName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Position.PositionId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
+                 <a asp-action="Edit" asp-route-id="@item.EmployeeId"> <i class="nav-icon fas fa-pen"></i></a> |
+                 <a asp-action="Delete" asp-route-id="@item.EmployeeId"> <i class="nav-icon fas fa-trash"></i></a>
             </td>
         </tr>
 }
