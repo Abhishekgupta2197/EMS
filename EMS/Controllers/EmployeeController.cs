@@ -22,7 +22,9 @@ namespace EMS.Controllers
         // GET: Employee
         public async Task<IActionResult> Index()
         {
-            var companyDbContext = _context.Employees.Include(e => e.Department).Include(e => e.Position);
+
+            var companyDbContext = _context.Employees.Include(e => e.City).Include(e => e.Department).Include(e => e.Country).Include(e => e.Position).Include(e => e.State);
+           
             return View(await companyDbContext.ToListAsync());
         }
 
@@ -35,8 +37,11 @@ namespace EMS.Controllers
             }
 
             var employee = await _context.Employees
+                .Include(e => e.City)
                 .Include(e => e.Department)
+                .Include(e => e.Country)
                 .Include(e => e.Position)
+                .Include(e => e.State)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
             if (employee == null)
             {
@@ -49,12 +54,11 @@ namespace EMS.Controllers
         // GET: Employee/Create
         public IActionResult Create()
         {
-           
+            //ViewBag.cities = new SelectList(_context.Cities, "CityId", "CityName");
             ViewBag.Depts = new SelectList(_context.Departments, "DepartmentId", "DepartmentName");
+            ViewBag.Countries = new SelectList(_context.Countries, "CountryId", "CountryName");
             ViewBag.Positions = new SelectList(_context.Positions, "PositionId", "PositionName");
-            ViewBag.Countriess = new SelectList(_context.Countries, "CountryId", "CountryName");
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId");
-            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId");
+            //ViewBag.States = new SelectList(_context.States, "StateId", "StateName");
             return View();
         }
 
@@ -63,7 +67,7 @@ namespace EMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,FirstName,LastName,BirthDate,Gender,Profile,EmailId,Password,DepartmentId,PositionId,CountryId,RegionId,CityId")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,FirstName,LastName,BirthDate,Gender,Profile,EmailId,Password,Address,DepartmentId,PositionId,CountryId,StateId,CityId")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -71,8 +75,11 @@ namespace EMS.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "CityId", employee.CityId);
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId", employee.DepartmentId);
+            ViewData["EmployeeId"] = new SelectList(_context.Countries, "CountryId", "CountryId", employee.EmployeeId);
             ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId", employee.PositionId);
+            ViewData["StateId"] = new SelectList(_context.States, "StateId", "StateId", employee.StateId);
             return View(employee);
         }
 
@@ -89,8 +96,9 @@ namespace EMS.Controllers
             {
                 return NotFound();
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId", employee.DepartmentId);
-            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId", employee.PositionId);
+            ViewBag.Depts = new SelectList(_context.Departments, "DepartmentId", "DepartmentName");
+            ViewBag.Countries = new SelectList(_context.Countries, "CountryId", "CountryName");
+            ViewBag.Positions = new SelectList(_context.Positions, "PositionId", "PositionName");
             return View(employee);
         }
 
@@ -99,7 +107,7 @@ namespace EMS.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FirstName,LastName,BirthDate,Gender,Profile,EmailId,Password,DepartmentId,PositionId,CountryId,RegionId,CityId")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FirstName,LastName,BirthDate,Gender,Profile,EmailId,Password,Address,DepartmentId,PositionId,CountryId,StateId,CityId")] Employee employee)
         {
             if (id != employee.EmployeeId)
             {
@@ -126,8 +134,11 @@ namespace EMS.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CityId"] = new SelectList(_context.Cities, "CityId", "CityId", employee.CityId);
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId", employee.DepartmentId);
+            ViewData["EmployeeId"] = new SelectList(_context.Countries, "CountryId", "CountryId", employee.EmployeeId);
             ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId", employee.PositionId);
+            ViewData["StateId"] = new SelectList(_context.States, "StateId", "StateId", employee.StateId);
             return View(employee);
         }
 
@@ -140,8 +151,11 @@ namespace EMS.Controllers
             }
 
             var employee = await _context.Employees
+                .Include(e => e.City)
                 .Include(e => e.Department)
+                .Include(e => e.Country)
                 .Include(e => e.Position)
+                .Include(e => e.State)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
             if (employee == null)
             {
@@ -167,33 +181,27 @@ namespace EMS.Controllers
             return _context.Employees.Any(e => e.EmployeeId == id);
         }
 
-        //public IActionResult CountryList()
-        //{
-        //    ViewBag.Countries = new SelectList(_context.Countries, "CountryId", "CountryName");
-        //    return View();
-        //}
-
-        // Loading states of Country(here Id = CountryId)
         public JsonResult LoadState(int Id)
         {
-            var state = _context.States.Where(e => e.StateCountryId== Id).ToList();
+            var state = _context.States.Where(e => e.StateCountryId == Id).ToList();
             return Json(new SelectList(state, "StateId", "StateName"));
-           
+
         }
 
         // Loading cities of State(here Id = StateId)
         public JsonResult LoadCity(int Id)
         {
             var city = _context.Cities.Where(e => e.CityStateId == Id).ToList();
-            return Json(new SelectList(city , "CityId", "CityName"));
+            return Json(new SelectList(city, "CityId", "CityName"));
         }
-
+        //Loading Department as a dropdrown List here by Id  
         public JsonResult LoadDepartment(int Id)
         {
             var dept = _context.Departments.Where(e => e.DepartmentId == Id).ToList();
             return Json(new SelectList(dept, "Department_Id", "Department_Name"));
         }
 
+        //Loading Department as a dropdrown List here by Id
         public JsonResult LoadPosition(int Id)
         {
             var position = _context.Positions.Where(e => e.PositionId == Id).ToList();

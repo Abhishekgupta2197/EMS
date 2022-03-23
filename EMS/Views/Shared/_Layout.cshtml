@@ -86,38 +86,30 @@
                             <a class="nav-link @Html.IsSelected(actions: "Index", controllers: "Employee")" href="@Url.Action("Index", "Employee")"><i class="nav-icon fas fa-users"></i><span> Employees</span> </a>
                         </li>
 
-                         <li class="nav-item">
-                            <a href="pages/home.html" class="nav-link"> 
-                                <i class="nav-icon fas fa-building"></i>
-                                <p>
-                                    Department
-                                </p>
-                            </a> 
+                        <li class="nav-item">
+                            <a class="nav-link @Html.IsSelected(actions: "Index", controllers: "Department")" href="@Url.Action("Index", "Department")"><i class="nav-icon fas fa-building"></i><span> Departments</span> </a>
                         </li>
 
                           <li class="nav-item">
                             <a class="nav-link @Html.IsSelected(actions: "Index", controllers: "Position")" href="@Url.Action("Index", "Position")"><i class="nav-icon fas fa-sitemap"></i><span> Positions</span> </a>
                         </li>
-
-
-                         <li class="nav-item">
-                            <a href="pages/home.html" class="nav-link">
-                                <i class="nav-icon fas fa-tasks"></i>
-                                <p>
-                                    Assign Task
-                                </p>
-                            </a>
+                        <li class="nav-item">
+                            <a class="nav-link @Html.IsSelected(actions: "Index", controllers: "AssignTask")" href="@Url.Action("Index", "AssignTask")"><i class="nav-icon fas fa-tasks"></i><span> Assign Tasks</span> </a>
                         </li>
 
                          <li class="nav-item">
                             <a href="pages/home.html" class="nav-link">
-                                <i class="nav-icon fas fa-calendar"></i>
+                                <i class="nav-icon fas fa-"></i>
                                 <p>
-                                    Leave Requests
+                                    
                                 </p>
                             </a>
                         </li>
-                        <li class="nav-item menu-close">
+
+                          <li class="nav-item">
+                            <a class="nav-link @Html.IsSelected(actions: "Index", controllers: "Leave")" href="@Url.Action("Index", "Leave")"><i class="nav-icon fas fa-calendar"></i><span> Leave Requests</span> </a>
+                        </li>
+                      @*  <li class="nav-item menu-close">
                             <a href="#" class="nav-link ">
                                 <i class="nav-icon fas fa-address-book"></i>
                                 <p>
@@ -145,7 +137,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li>*@
                         
                     </ul>
                 </nav>
@@ -160,7 +152,7 @@
             <!-- Main content -->
             <div class="content">
                 <div class="container-fluid">
-                    @RenderBody()
+                         @RenderBody()
                 </div>
                 <!-- /.container-fluid -->
             </div>

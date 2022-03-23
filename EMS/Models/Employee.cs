@@ -7,11 +7,11 @@ namespace EMS.Models
     {
         public Employee()
         {
+            AssignTasks = new HashSet<AssignTask>();
             HoursWorkeds = new HashSet<HoursWorked>();
             Leaves = new HashSet<Leave>();
             PayTypes = new HashSet<PayType>();
             Pays = new HashSet<Pay>();
-            Tasks = new HashSet<Task>();
         }
 
         public int EmployeeId { get; set; }
@@ -31,13 +31,13 @@ namespace EMS.Models
 
         public virtual City City { get; set; } = null!;
         public virtual Department Department { get; set; } = null!;
-        public virtual Country EmployeeNavigation { get; set; } = null!;
+        public virtual Country Country { get; set; } = null!;
         public virtual Position Position { get; set; } = null!;
         public virtual State State { get; set; } = null!;
+        public virtual ICollection<AssignTask> AssignTasks { get; set; }
         public virtual ICollection<HoursWorked> HoursWorkeds { get; set; }
         public virtual ICollection<Leave> Leaves { get; set; }
         public virtual ICollection<PayType> PayTypes { get; set; }
         public virtual ICollection<Pay> Pays { get; set; }
-        public virtual ICollection<Task> Tasks { get; set; }
     }
 }
